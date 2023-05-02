@@ -88,6 +88,7 @@ userRouter.post("/users/:id/friend_request",auth,async(req,res)=>{
 
     const id = req.params.id
     const Userid = req.body
+    //console.log(Userid.Userid)
     
    if(id==Userid.Userid){
     res.send("cant send request to ypurself")
@@ -95,7 +96,7 @@ userRouter.post("/users/:id/friend_request",auth,async(req,res)=>{
 
    const friend = await User.findById(id)
 
-   friend.friendRequests.push(Userid)
+   friend.friendRequests.push(Userid.Userid)
 
    await friend.save()
 

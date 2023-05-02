@@ -16,7 +16,8 @@ postRouter.post("/newpost",auth,async(req,res)=>{
     const {text,image} = req.body
 
     const Userid = req.body.Userid
-    const post = new Post({user:Userid,text,image})
+    const post = await Post.insertMany([{user:Userid,text,image}])
+    
 
     res.send("post has been created")
 })
