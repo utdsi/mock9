@@ -43,7 +43,7 @@ METHOD: "get"
 ```javascript
 https://sleepy-shorts-newt.cyclic.app/posts
 ```
-## create new post
+##create new post
 <br>
 METHOD: "POST"
 ```javascript
