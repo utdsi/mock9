@@ -3,6 +3,7 @@ const express = require("express")
 const jwt = require("jsonwebtoken")
 const bcrypt = require("bcrypt")
 const {User} = require("../model/user.model.js")
+const {auth}  = require("../middleware/auth.js")
 
 require('dotenv').config()
 
@@ -62,6 +63,80 @@ try {
 
 })
 
+
+userRouter.get("/users",async (req,res)=>{
+
+    const users = await User.find()
+
+    res.send(users)
+})
+
+userRouter.get("/users/:id/friends",async(req,res)=>{
+
+    const id = req.params.id
+
+    const user = await User.findById(id)
+
+    if(user){
+        res.send(user.friends)
+    }
+
+
+})
+
+userRouter.post("/users/:id/friend_request",auth,async(req,res)=>{
+
+    const id = req.params.id
+    const Userid = req.body
+    
+   if(id==Userid.Userid){
+    res.send("cant send request to ypurself")
+   }
+
+   const friend = await User.findById(id)
+
+   friend.friendRequests.push(Userid)
+
+   await friend.save()
+
+   res.send("friend request sent")
+
+
+
+})
+
+
+userRouter.put("/users/:id/friends/:friendId",async (req,res)=>{
+
+const id = req.params.id
+
+const freindid = req.params.friendId
+
+const user = await User.findById(id)
+
+let {request} = req.body
+
+if(request=="reject"){
+    res.send("rejected")
+}
+
+if(!user){
+    res.send("user not found")
+}
+
+if(request=="accept"){
+    user.friends.push(freindid)
+    await user.save()
+
+
+    res.send("accepted")
+}
+
+
+
+
+
+})
 module.exports = {userRouter}
 
 
